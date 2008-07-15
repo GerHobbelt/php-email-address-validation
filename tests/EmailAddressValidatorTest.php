@@ -108,6 +108,10 @@
             $this->assertEquals(false, $this->objValidator->check_email_address('test@.org'));
         }
 
+        public function testInvalidAddress_LocalPartTooLong() {
+            $this->assertEquals(false, $this->objValidator->check_email_address('12345678901234567890123456789012345678901234567890123456789012345@example.com')); // 64 characters is maximum length for local part. This is 65.
+        }
+
         public function testInvalidAddress_DomainLabelTooLong() {
             $this->assertEquals(false, $this->objValidator->check_email_address('test@123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012.com')); // 255 characters is maximum length for domain. This is 256.
         }
