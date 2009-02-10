@@ -149,6 +149,11 @@
                        .'([A-Za-z0-9]+))$/', $arrDomainPortion[$i])) {
                         return false;
                     }
+                    if ($i == $max - 1) { // TLD cannot be only numbers
+                        if (strlen(preg_replace('/[^0-9]/', '', $arrDomainPortion[$i])) <= 0) {
+                            return false;
+                        }
+                    }
                 }
             }
             return true;

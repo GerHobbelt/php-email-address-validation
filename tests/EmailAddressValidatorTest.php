@@ -45,6 +45,11 @@
             $this->assertEquals(true, $this->objValidator->check_email_address('t*est@example.com'));
             $this->assertEquals(true, $this->objValidator->check_email_address('+1~1+@example.com'));
             $this->assertEquals(true, $this->objValidator->check_email_address('{_test_}@example.com'));
+            $this->assertEquals(true, $this->objValidator->check_email_address('test\"test@example.com'));
+            $this->assertEquals(true, $this->objValidator->check_email_address('test\@test@example.com'));
+            $this->assertEquals(true, $this->objValidator->check_email_address('test\test@example.com'));
+            $this->assertEquals(true, $this->objValidator->check_email_address('"test\test"@example.com'));
+            $this->assertEquals(true, $this->objValidator->check_email_address('"test.test"@example.com'));
         }
 
         public function testValidAddress_QuotedLocalPart() {
@@ -79,6 +84,14 @@
         /* Invalid Addresses
         -------------------- */
 
+        public function testInvalidAddress_TooLong() {
+            $this->assertEquals(false, $this->objValidator->check_email_address('12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345@example.com'));
+        }
+
+        public function testInvalidAddress_TooShort() {
+            $this->assertEquals(false, $this->objValidator->check_email_address('@a'));
+        }
+
         public function testInvalidAddress_NoAtSymbol() {
             $this->assertEquals(false, $this->objValidator->check_email_address('test.example.com'));
         }
@@ -97,7 +110,6 @@
         public function testInvalidAddress_InvalidCharactersInLocalPart() {
             $this->assertEquals(false, $this->objValidator->check_email_address('-- test --@example.com')); // No spaces allowed in local part
             $this->assertEquals(false, $this->objValidator->check_email_address('[test]@example.com')); // Square brackets only allowed within quotes
-            $this->assertEquals(false, $this->objValidator->check_email_address('"test\test"@example.com')); // Quotes cannot contain backslash
             $this->assertEquals(false, $this->objValidator->check_email_address('"test"test"@example.com')); // Quotes cannot be nested
             $this->assertEquals(false, $this->objValidator->check_email_address('()[]\;:,<>@example.com')); // Disallowed Characters
         }
